@@ -1,79 +1,4 @@
 <?php $this->load->view('templates/header') ?>
-<div class="container">
-    <h2>Daftar Barang Ruangan</h2>
-    <a href="<?php echo site_url(INDEX_URL . 'barang/input'); ?>" class="btn btn-success mb-3"><i class="fa fa-plus"></i> Tambah Barang Baru</a>
-    <hr>
-    <div class="card mb-4">
-        <div class="card-header">
-            Filter Data
-        </div>
-        <div class="card-body">
-            <form id="form-filter">
-                <div class="row">
-                    <div class="form-group col-xs-12 col-sm-6"> <label for="filter_nama_barang" class="sr-only">Nama Barang:</label>
-                        <input type="text" class="form-control" id="filter_nama_barang" name="filter_nama_barang" placeholder="Nama Barang">
-                    </div>
-                    <div class="form-group col-xs-12 col-sm-6"> <label for="filter_penguasaan" class="sr-only">Penguasaan:</label>
-                        <input type="text" class="form-control" id="filter_penguasaan" name="filter_penguasaan" placeholder="Penguasaan">
-                    </div>
-                    <div class="form-group col-xs-12 col-sm-6">
-                        <label for="filter_ruangan" class="sr-only">Ruangan:</label>
-                        <select class="form-control" id="filter_ruangan" name="filter_ruangan">
-                            <option value="">Semua Ruangan</option>
-                            <?php foreach ($ruangan_options as $ruangan): ?>
-                                <option value="<?= $ruangan['lantai']; ?>-<?= $ruangan['nama_ruangan']; ?>" <?= set_select('ruangan', $ruangan['nama_ruangan']); ?>>
-                                    <?= $ruangan['lantai']; ?>-<?= $ruangan['nama_ruangan']; ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-3 col-sm-3 mb-2">
-                        <button type="button" id="btn-filter" class="btn btn-primary btn-block"><i class="fa fa-filter"></i> Filter</button>
-                    </div>
-                    <div class="col-xs-3 col-sm-3 mb-2">
-                        <button type="button" id="btn-reset" class="btn btn-default btn-block"><i class="fa fa-refresh"></i> Reset</button>
-                    </div>
-                    <div class="col-xs-3 col-sm-3 mb-2">
-                        <button type="button" id="btn-export-excel" class="btn btn-info btn-block"><i class="fa fa-file-excel-o"></i> Export Excel Filtered</button>
-                    </div>
-
-                    <div class="col-xs-3 col-sm-3 mb-2">
-                        <button id="exportPdfBtn" class="btn btn-danger btn-block"><i class="fa fa-file-pdf-o"></i> Export PDF </button>
-                    </div>
-
-
-
-                </div>
-            </form>
-        </div>
-    </div>
-    <div class=" table-responsive">
-        <table id="table-barang" class="table table-striped table-bordered" style="width:100%">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Nama Barang</th>
-                    <th>Kode Barang</th>
-                    <th>NUP</th>
-                    <th>Merk</th>
-                    <th>Ruangan</th>
-                    <th>Jumlah</th>
-                    <th>Penguasaan</th>
-                    <th>kondisi</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-
-
-<?php $this->load->view('templates/footer') ?>
 
 <style>
     /* Styling dari sebelumnya, tambahkan atau modifikasi sesuai kebutuhan */
@@ -169,6 +94,96 @@
         font-size: 0.85em;
     }
 </style>
+<div class="container">
+    <h2>Daftar Barang Ruangan</h2>
+    <a href="<?php echo site_url(INDEX_URL . 'barang/input'); ?>" class="btn btn-success mb-3"><i class="fa fa-plus"></i> Tambah Barang Baru</a>
+    <hr>
+    <div class="card mb-4">
+        <div class="card-header">
+            Filter Data
+        </div>
+        <div class="card-body">
+            <form id="form-filter">
+                <div class="row">
+                    <div class="form-group col-xs-12 col-sm-6"> <label for="filter_nama_barang" class="sr-only">Nama Barang:</label>
+                        <input type="text" class="form-control" id="filter_nama_barang" name="filter_nama_barang" placeholder="Nama Barang">
+                    </div>
+                    <div class="form-group col-xs-12 col-sm-6"> <label for="filter_kode_barang" class="sr-only">Kode Barang:</label>
+                        <input type="text" class="form-control" id="filter_kode_barang" name="filter_kode_barang" placeholder="Kode Barang">
+                    </div>
+                    <div class="form-group col-xs-12 col-sm-6"> <label for="filter_nup" class="sr-only">NUP:</label>
+                        <input type="text" class="form-control" id="filter_nup" name="filter_nup" placeholder="NUP">
+                    </div>
+                    <div class="form-group col-xs-12 col-sm-6"> <label for="filter_penguasaan" class="sr-only">Penguasaan:</label>
+                        <input type="text" class="form-control" id="filter_penguasaan" name="filter_penguasaan" placeholder="Penguasaan">
+                    </div>
+                    <div class="form-group col-xs-12 col-sm-6">
+                        <label for="filter_kondisi" class="sr-only">Kondisi:</label>
+                        <select class="form-control" id="filter_kondisi" name="filter_kondisi">
+                            <option value="">-Pilih Kondisi-</option>
+                            <option value="Baik">Baik</option>
+                            <option value="Rusak-Ringan">Rusak-Ringan</option>
+                            <option value="Rusak">Rusak</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-xs-12 col-sm-6">
+                        <label for="filter_ruangan" class="sr-only">Ruangan:</label>
+                        <select class="form-control" id="filter_ruangan" name="filter_ruangan">
+                            <option value="">Semua Ruangan</option>
+                            <?php foreach ($ruangan_options as $ruangan): ?>
+                                <option value="<?= $ruangan['lantai']; ?>-<?= $ruangan['nama_ruangan']; ?>" <?= set_select('ruangan', $ruangan['nama_ruangan']); ?>>
+                                    <?= $ruangan['lantai']; ?>-<?= $ruangan['nama_ruangan']; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-sm-3 mb-2">
+                        <button type="button" id="btn-filter" class="btn btn-primary btn-block"><i class="fa fa-filter"></i> Filter</button>
+                    </div>
+                    <div class="col-xs-3 col-sm-3 mb-2">
+                        <button type="button" id="btn-reset" class="btn btn-default btn-block"><i class="fa fa-refresh"></i> Reset</button>
+                    </div>
+                    <div class="col-xs-3 col-sm-3 mb-2">
+                        <button type="button" id="btn-export-excel" class="btn btn-info btn-block"><i class="fa fa-file-excel-o"></i> Export Excel Filtered</button>
+                    </div>
+                    <div class="col-xs-3 col-sm-3 mb-2">
+                        <button id="exportPdfBtn" class="btn btn-danger btn-block"><i class="fa fa-file-pdf-o"></i> Export PDF </button>
+                    </div>
+
+
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class=" table-responsive">
+        <table id="table-barang" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Barang</th>
+                    <th>Kode Barang</th>
+                    <th>NUP</th>
+                    <th>Merk</th>
+                    <th>Ruangan</th>
+                    <th>Jumlah</th>
+                    <th>Penguasaan</th>
+                    <th>kondisi</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<?php $this->load->view('templates/footer') ?>
+
 
 <div class="modal fade" id="detailBarangModal" tabindex="-1" role="dialog" aria-labelledby="detailBarangModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -256,8 +271,8 @@
 </div>
 
 <script>
-    $('#exportPdfBtn').on('click', function() {
-
+    $('#exportPdfBtn').on('click', function(e) {
+        e.preventDefault();
         var ruangan = $('#filter_ruangan').val();
 
         // --- Validasi di sini ---
@@ -274,8 +289,8 @@
         // Arahkan browser ke URL export PDF
         window.open(export_url, '_blank'); // Membuka di tab baru
     });
-    $('#btn-export-excel').click(function() {
-
+    $('#btn-export-excel').click(function(e) {
+        e.preventDefault();
         var ruangan = $('#filter_ruangan').val();
 
         // --- Validasi di sini ---
@@ -445,8 +460,9 @@
                     d.filter_nama_barang = $('#filter_nama_barang').val();
                     d.filter_ruangan = $('#filter_ruangan').val();
                     d.filter_penguasaan = $('#filter_penguasaan').val();
-
-
+                    d.filter_kode_barang = $('#filter_kode_barang').val();
+                    d.filter_nup = $('#filter_nup').val();
+                    d.filter_kondisi = $('#filter_kondisi').val();
                 }
             },
             "columnDefs": [{

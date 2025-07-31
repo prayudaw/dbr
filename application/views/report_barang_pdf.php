@@ -185,7 +185,7 @@
         </div>
         <div class="info-right">
             <div class="info-item">NAMA RUANGAN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <?php echo $nama_ruangan ?></div>
-            <div class="info-item">KODE RUANGAN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: 202</div>
+            <div class="info-item">KODE RUANGAN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <?php echo $kode_ruangan ?></div>
         </div>
     </div>
 
@@ -259,8 +259,8 @@
         </div>
         <div class="signature-left" style="margin-top: 20px;">
             <div class="signature-item">Penanggung Jawab UAKPB</div>
-            <div class="signature-name">Hasan Latif, S.IP</div>
-            <div class="signature-item">NIP. 19830222 000000 1 101</div>
+            <div class="signature-name">Prayuda Wirawan</div>
+            <div class="signature-item"></div>
         </div>
     </div>
 

@@ -10,12 +10,21 @@ class Barang extends CI_Controller
         $this->load->helper('form');
         $this->load->library('form_validation');
         $this->load->model('Barang_model');
+        $this->load->model('Ruang_model');
         $this->load->library('dompdf_lib'); // Load library Dompdf_lib yang baru kita buat
+    }
+
+
+    public function statistik()
+    {
+        $data = array();
+        $this->load->view('statistik', $data);
     }
 
 
     public function input()
     {
+
         // ... (Kode input barang dari sebelumnya, tidak berubah) ...
         $data['barang_options'] = $this->Barang_model->get_barang();
         // --- TAMBAHKAN BARIS INI ---
@@ -232,8 +241,12 @@ class Barang extends CI_Controller
         $filter_ruangan = trim($this->input->get('ruangan'));
 
         // Fetch all data from the database
+        $get_number_room = $this->Ruang_model->getNumberRoom($filter_ruangan);
+
         $data['barang'] = $this->Barang_model->get_dbr_filter($filter_ruangan); // Reuse get_all_barang or create a new method for export if needed
         $data['nama_ruangan'] = $filter_ruangan;
+        $data['kode_ruangan'] = $get_number_room['kode'];
+
 
         $html = $this->load->view('report_barang_pdf', $data, true); // Load view PDF dan simpan outputnya sebagai string
 

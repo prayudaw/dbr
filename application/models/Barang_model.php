@@ -6,7 +6,7 @@ class Barang_model extends CI_Model
 
     var $table = 'dbr';
     var $column_order = array(null, 'nama_barang', 'kode_barang', 'nup', 'merk_type', 'jumlah_barang', 'kondisi', 'ruangan', 'penguasaan', 'keterangan', 'tanggal_input'); // Kolom yang bisa di-order
-    var $column_search = array('nama_barang', 'ruangan', 'penguasaan'); // Kolom yang bisa dicari
+    var $column_search = array('nama_barang', 'kode_barang', 'nup', 'ruangan', 'penguasaan', 'kondisi'); // Kolom yang bisa dicari
     var $order = array('id' => 'desc'); // Urutan default
 
 
@@ -21,12 +21,8 @@ class Barang_model extends CI_Model
     {
         // die('tes');
         $this->db->select('*'); // Hanya ambil nama barang
-        $this->db->limit(30);
-        $query = $this->db->get('dbr');
-        // echo $this->db->last_query();
-        // die();
-
-        return $query->result();
+        $query = $this->db->get('barang');
+        return $query->result_array();
     }
 
 
@@ -58,6 +54,9 @@ class Barang_model extends CI_Model
     {
         return $this->db->insert('dbr', $data);
     }
+
+
+
 
 
     // Method baru untuk menghapus data dbr berdasarkan ID
@@ -127,6 +126,19 @@ class Barang_model extends CI_Model
         // Penambahan filter dari form
         if (!empty($_POST['filter_nama_barang'])) {
             $this->db->like('nama_barang', trim($_POST['filter_nama_barang']));
+        }
+
+        if (!empty($_POST['filter_kode_barang'])) {
+            $this->db->like('kode_barang', trim($_POST['filter_kode_barang']));
+        }
+
+
+        if (!empty($_POST['filter_nup'])) {
+            $this->db->like('nup', trim($_POST['filter_nup']));
+        }
+
+        if (!empty($_POST['filter_kondisi'])) {
+            $this->db->like('kondisi', trim($_POST['filter_kondisi']));
         }
 
 
