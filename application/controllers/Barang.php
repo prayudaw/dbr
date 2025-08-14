@@ -11,7 +11,7 @@ class Barang extends CI_Controller
         $this->load->library('form_validation');
         $this->load->model('Barang_model');
         $this->load->model('Ruang_model');
-        $this->load->library('dompdf_lib'); // Load library Dompdf_lib yang baru kita buat
+        // $this->load->library('dompdf_lib'); // Load library Dompdf_lib yang baru kita buat
     }
 
 
@@ -251,6 +251,6 @@ class Barang extends CI_Controller
         $html = $this->load->view('report_barang_pdf', $data, true); // Load view PDF dan simpan outputnya sebagai string
 
         $filename = 'daftar_barang_ruangan_' . date('Ymd_His');
-        $this->dompdf_lib->create_pdf($html, $filename, TRUE, 'A4', 'portrait');
+        // $this->dompdf_lib->create_pdf($html, $filename, TRUE, 'A4', 'portrait');
     }
 }
