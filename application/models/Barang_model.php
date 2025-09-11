@@ -57,8 +57,6 @@ class Barang_model extends CI_Model
 
 
 
-
-
     // Method baru untuk menghapus data dbr berdasarkan ID
     public function delete_dbr_by_id($id)
     {

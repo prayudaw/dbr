@@ -253,4 +253,5 @@ class Barang extends CI_Controller
         $filename = 'daftar_barang_ruangan_' . date('Ymd_His');
         // $this->dompdf_lib->create_pdf($html, $filename, TRUE, 'A4', 'portrait');
     }
+
 }
