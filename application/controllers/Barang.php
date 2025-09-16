@@ -93,18 +93,18 @@ class Barang extends CI_Controller
 
 
     public function daftar()
-{
-    $data = array(
-        'ruangan_options' => $this->db->select('*')->get('ruangan')->result_array()
-    );
+    {
+        $data = array(
+            'ruangan_options' => $this->db->select('*')->get('ruangan')->result_array()
+        );
 
-    // Wrap dengan template dashboard
-    $this->load->view('templates/header');
-    $this->load->view('templates/sidebar');
-    $this->load->view('templates/topbar');
-    $this->load->view('barang_list', $data);
-    $this->load->view('templates/footer');
-}
+        // Wrap dengan template dashboard
+        $this->load->view('templates/header');
+        $this->load->view('templates/sidebar');
+        $this->load->view('templates/topbar');
+        $this->load->view('barang_list', $data);
+        $this->load->view('templates/footer');
+    }
 
     public function ajax_list()
     {
@@ -259,5 +259,4 @@ class Barang extends CI_Controller
         $filename = 'daftar_barang_ruangan_' . date('Ymd_His');
         // $this->dompdf_lib->create_pdf($html, $filename, TRUE, 'A4', 'portrait');
     }
-
 }

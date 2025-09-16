@@ -79,4 +79,35 @@ class User extends CI_Controller
         }
         echo json_encode($data);
     }
+
+    public function add_user()
+    {
+        header('Content-Type: application/json');
+        $POST = $this->input->post();
+        $username = trim($POST['username']);
+        $password = trim($POST['password']);
+        $role = trim($POST['role']);
+        if ($username !== '' && $password  !== '' && $role  !== '') {
+            $data_add = array(
+                'username' =>  $username,
+                'password' => password_hash($password, PASSWORD_DEFAULT),
+                'role' => $role
+            );
+
+            $insert = $this->user_model->insert_user($data_add); //proses input data ke database
+            if ($insert) {
+                $data = array(
+                    'status' => 1,
+                    'message' => 'Data Berhasil di Simpan'
+                );
+            }
+        } else {
+            $data = array(
+                'status' => 0,
+                'message' => 'Data harus lengkap'
+            );
+        }
+
+        echo json_encode($data);
+    }
 }

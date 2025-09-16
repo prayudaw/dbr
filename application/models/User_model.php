@@ -91,4 +91,9 @@ class User_model extends CI_Model
         $this->db->where('id', $id);
         $this->db->update($this->table, $data);
     }
+
+    public function insert_user($data)
+    {
+        return $this->db->insert($this->table, $data);
+    }
 }
