@@ -11,8 +11,11 @@
     <title>Login BMN Perpustakaan</title>
 
     <!-- Custom fonts for this template-->
-    <link href="<?php echo base_url('assets/') ?>vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="<?php echo base_url('assets/') ?>vendor/fontawesome-free/css/all.min.css" rel="stylesheet"
+        type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template-->
@@ -43,7 +46,8 @@
     </style>
 </head>
 
-<body class="bg-gradient" style="background-image: url('<?php echo base_url('assets/img/perpus/perpus1.jpg'); ?>');background-position: center;background-size: cover;">
+<body class="bg-gradient"
+    style="background-image: url('<?php echo base_url('assets/img/perpus/perpus1.jpg'); ?>');background-position: center;background-size: cover;">
 
     <div class="container">
         <!-- Outer Row -->
@@ -57,9 +61,9 @@
                             <div class="col-lg-12">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <img src="<?php echo base_url('assets/img/perpus/logo-perpus.png') ?>" style="width: 90px;margin-bottom:10px">
+                                        <img src="<?php echo base_url('assets/img/perpus/logo-perpus.png') ?>"
+                                            style="width: 90px;margin-bottom:10px">
                                         <span class="login100-form-title">
-                                            <strong style="color: #FBC02D;">BMN</strong> &nbsp Perpustakaan
                                         </span>
                                         <span class="login100-form-sub-title p-b-26">
                                             Sistem Informasi BMN Perpustakaan UIN Sunan Kalijaga
@@ -68,13 +72,17 @@
 
                                     <form method="post" class="user" id="form-login">
                                         <div class="form-group">
-                                            <input type="text" name="username" class="form-control form-control-user" id="username" placeholder="Enter Username">
+                                            <input type="text" name="username" class="form-control form-control-user"
+                                                id="username" placeholder="Enter Username">
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" name="password" class="form-control form-control-user" id="password" placeholder="Enter Password">
+                                            <input type="password" name="password"
+                                                class="form-control form-control-user" id="password"
+                                                placeholder="Enter Password">
                                         </div>
 
-                                        <button type="submit" class="btn btn-primary btn-user btn-block btn-login">Login</button>
+                                        <button type="submit"
+                                            class="btn btn-primary btn-user btn-block btn-login">Login</button>
                                     </form>
 
                                     <hr>
@@ -140,7 +148,8 @@
                                     showConfirmButton: false,
                                     timer: 1500
                                 }).then(() => {
-                                    window.location.href = "<?php echo base_url('dashboard/home'); ?>";
+                                    window.location.href =
+                                        "<?php echo base_url('dashboard/home'); ?>";
                                 });
                             } else {
                                 Swal.fire({
@@ -166,4 +175,5 @@
         });
     </script>
 </body>
+
 </html>
