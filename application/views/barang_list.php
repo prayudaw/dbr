@@ -1,4 +1,5 @@
-<?php $this->load->view('templates/header') ?>
+<?php $this->load->view('templates/header'); ?>
+<?php $this->load->view('templates/sidebar'); ?>
 
 <style>
     /* Styling dari sebelumnya, tambahkan atau modifikasi sesuai kebutuhan */
@@ -94,7 +95,7 @@
         font-size: 0.85em;
     }
 </style>
-<div class="container">
+<div class="container mt-auto">
     <h2>Daftar Barang Ruangan</h2>
     <a href="<?php echo site_url(INDEX_URL . 'barang/input'); ?>" class="btn btn-success mb-3"><i class="fa fa-plus"></i> Tambah Barang Baru</a>
     <hr>
@@ -151,9 +152,6 @@
                     <div class="col-xs-3 col-sm-3 mb-2">
                         <button id="exportPdfBtn" class="btn btn-danger btn-block"><i class="fa fa-file-pdf-o"></i> Export PDF </button>
                     </div>
-
-
-
                 </div>
             </form>
         </div>
@@ -170,7 +168,7 @@
                     <th>Ruangan</th>
                     <th>Jumlah</th>
                     <th>Penguasaan</th>
-                    <th>kondisi</th>
+                    <th>Kondisi</th>
                     <th>Aksi</th>
                 </tr>
             </thead>

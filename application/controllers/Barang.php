@@ -15,11 +15,11 @@ class Barang extends CI_Controller
     }
 
 
-    public function statistik()
-    {
-        $data = array();
-        $this->load->view('statistik', $data);
-    }
+    // public function statistik()
+    // {
+    //     $data = array();
+    //     $this->load->view('statistik', $data);
+    // }
 
 
     public function input()
@@ -91,14 +91,20 @@ class Barang extends CI_Controller
         echo json_encode($data);
     }
 
+
     public function daftar()
-    {
-        // $data['ruangan_options'] = $this->db->select('DISTINCT ruangan')->get('barang')->result_array();
-        $data = array(
-            'ruangan_options' => $this->db->select('*')->get('ruangan')->result_array()
-        );
-        $this->load->view('barang_list', $data);
-    }
+{
+    $data = array(
+        'ruangan_options' => $this->db->select('*')->get('ruangan')->result_array()
+    );
+
+    // Wrap dengan template dashboard
+    $this->load->view('templates/header');
+    $this->load->view('templates/sidebar');
+    $this->load->view('templates/topbar');
+    $this->load->view('barang_list', $data);
+    $this->load->view('templates/footer');
+}
 
     public function ajax_list()
     {

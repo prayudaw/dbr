@@ -3,15 +3,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class User_model extends CI_Model {
 
-    public function check_login($username, $password)
+    public function get_user_by_username($username)
     {
-        $this->db->where('username', $username);
-        $this->db->where('password', $password); // sebaiknya pakai password hash
-        $query = $this->db->get('user'); // tabel user
+        return $this->db->get_where('user', ['username' => $username])->row();
+    }
 
-        if ($query->num_rows() == 1) {
-            return $query->row_array();
-        }
-        return false;
+    // method baru untuk ambil semua user
+    public function get_all()
+    {
+        return $this->db->get('user')->result(); // ambil semua baris tabel user
     }
 }
