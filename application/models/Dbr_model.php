@@ -1,11 +1,11 @@
 <?php
 
-class Barang_model extends CI_Model
+class Dbr_model extends CI_Model
 {
-    private $table = "barang";
-    private $column_order = array('kode_barang', 'nama_barang', 'NUP', 'merk', 'tgl_perolehan', 'kategori');
-    private $column_search = array('kode_barang', 'nama_barang', 'NUP', 'merk', 'tgl_perolehan', 'kategori');
-    private $order = array('nama_barang' => 'asc');
+    var $table = 'dbr';
+    var $column_order = array(null, 'nama_barang', 'kode_barang', 'nup', 'merk_type', 'jumlah_barang', 'kondisi', 'ruangan', 'penguasaan', 'keterangan', 'tanggal_input'); // Kolom yang bisa di-order
+    var $column_search = array('nama_barang', 'kode_barang', 'nup', 'ruangan', 'penguasaan', 'kondisi'); // Kolom yang bisa dicari
+    var $order = array('id' => 'desc'); // Urutan default
 
     public function __construct()
     {
@@ -36,26 +36,36 @@ class Barang_model extends CI_Model
         }
 
         ## Search
+        // Penambahan filter dari form
+
         if (!empty($_POST['searchKodeBarang'])) {
-            $this->db->where('kode_barang like "%' . $_POST['searchKodeBarang'] . '%"');
+            $this->db->like('kode_barang', trim($_POST['searchKodeBarang']));
         }
 
         if (!empty($_POST['searchNamaBarang'])) {
-            $this->db->where('nama_barang like "%' . $_POST['searchNamaBarang'] . '%"');
-        }
-
-        if (!empty($_POST['searchKategori'])) {
-            $this->db->where('kategori like "%' . $_POST['searchKategori'] . '%"');
+            $this->db->like('nama_barang', trim($_POST['searchNamaBarang']));
         }
 
         if (!empty($_POST['searchMerk'])) {
-            $this->db->where('merk like "%' . $_POST['searchMerk'] . '%"');
+            $this->db->like('merk_type', trim($_POST['searchMerk']));
         }
+
 
         if (!empty($_POST['searchNUP'])) {
-            $this->db->where('NUP ="' . $_POST['searchNUP'] . '"');
+            $this->db->like('nup', trim($_POST['searchNUP']));
         }
 
+        if (!empty($_POST['searchKondisi'])) {
+            $this->db->like('kondisi', trim($_POST['searchKondisi']));
+        }
+
+        if (!empty($_POST['searchPenguasaan'])) {
+            $this->db->like('penguasaan', trim($_POST['searchPenguasaan']));
+        }
+
+        if (!empty($_POST['searchRuangan'])) {
+            $this->db->like('ruangan', trim($_POST['searchRuangan']));
+        }
 
         // jika datatable mengirim POST untuk order
         if ($this->input->post('order')) {
@@ -86,27 +96,24 @@ class Barang_model extends CI_Model
         return $query->num_rows();
     }
 
-    //
     public function count_all()
     {
         $this->db->from($this->table);
         return $this->db->count_all_results();
     }
 
-    // Fungsi baru untuk mengambil daftar barang 
-    public function get_barang()
+    //simpan data ke dbr
+    public function insert($data)
     {
-        $this->db->select('*'); // Hanya ambil nama barang
-        $query = $this->db->get($this->table);
-        return $query->result_array();
+        return $this->db->insert('dbr', $data);
     }
 
-    // Fungsi baru untuk mengambil daftar barang berdasarkan id
-    public function get_barang_by_id($id)
+    //get data dbr bedasarkan ruangan
+    public function get_dbr_filter($filter_ruangan)
     {
-        $this->db->select('*');
-        $this->db->where('id', $id); // Hanya ambil  berdasarkan id
+        $this->db->select('*'); // Hanya ambil nama barang
+        $this->db->where('ruangan', $filter_ruangan);
         $query = $this->db->get($this->table);
-        return $query->row_array();
+        return $query->result();
     }
 }

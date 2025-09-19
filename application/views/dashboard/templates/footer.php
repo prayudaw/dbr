@@ -40,6 +40,8 @@
 <script src="<?php echo base_url('assets/') ?>js/demo/chart-area-demo.js"></script>
 <script src="<?php echo base_url('assets/') ?>js/demo/chart-pie-demo.js"></script>
 
+<!-- select 2 -->
+<script src="<?php echo base_url('assets/') ?>select2.min.js"></script>
 
 <!-- Page level plugins -->
 <script src="<?php echo base_url('assets/') ?>vendor/datatables/jquery.dataTables.min.js"></script>

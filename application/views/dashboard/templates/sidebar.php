@@ -22,20 +22,44 @@
             <!-- Divider -->
             <hr class="sidebar-divider">
             <div class="sidebar-heading">
-                Data
+                Data Barang Perpus
             </div>
 
-            <!-- Nav Item - Histori Peminjaman Buku -->
+            <li class="nav-item active">
+                <a class="nav-link" href="<?php echo base_url('dashboard/barang/add') ?>">
+                    <i class="fas fa-fw fa-plus"></i>
+                    <span>Tambah Barang</span></a>
+            </li>
             <li class="nav-item active">
                 <a class="nav-link" href="<?php echo base_url('dashboard/barang') ?>">
                     <i class="fas fa-fw fa-book"></i>
-                    <span>Daftar Barang</span></a>
+                    <span>list</span></a>
             </li>
+
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+            <div class="sidebar-heading">
+                Daftar Barang Ruangan (DBR)
+            </div>
+
+            <li class="nav-item active">
+                <a class="nav-link" href="<?php echo base_url('dashboard/dbr/add') ?>">
+                    <i class="fas fa-fw fa-plus"></i>
+                    <span>Tambah DBR</span></a>
+            </li>
+
+            <li class="nav-item active">
+                <a class="nav-link" href="<?php echo base_url('dashboard/dbr') ?>">
+                    <i class="fas fa-fw fa-book"></i>
+                    <span>list</span></a>
+            </li>
+
 
             <div class="sidebar-heading">
                 Setting
             </div>
-            <!-- Nav Item - Histori Peminjaman Kunjungan -->
+            <!-- Nav Item list user -->
             <li class="nav-item active">
                 <a class="nav-link" href="<?php echo base_url('dashboard/user') ?>">
                     <i class="fas fa-fw fa-user"></i>

@@ -22,27 +22,27 @@
     <link href="<?php echo base_url('assets/') ?>css/sb-admin-2.min.css" rel="stylesheet">
 
     <style>
-        .login100-form-title {
-            display: block;
-            font-family: 'Trebuchet MS', sans-serif;
-            font-size: 42px;
-            font-weight: bold;
-            color: #333333;
-            text-align: center;
-        }
+    .login100-form-title {
+        display: block;
+        font-family: 'Trebuchet MS', sans-serif;
+        font-size: 42px;
+        font-weight: bold;
+        color: #333333;
+        text-align: center;
+    }
 
-        .login100-form-sub-title {
-            display: block;
-            font-family: 'Arial', sans-serif;
-            font-size: 18px;
-            font-weight: bold;
-            color: #555555;
-            text-align: center;
-        }
+    .login100-form-sub-title {
+        display: block;
+        font-family: 'Arial', sans-serif;
+        font-size: 18px;
+        font-weight: bold;
+        color: #555555;
+        text-align: center;
+    }
 
-        .p-b-26 {
-            padding-bottom: 26px;
-        }
+    .p-b-26 {
+        padding-bottom: 26px;
+    }
     </style>
 </head>
 
@@ -108,71 +108,71 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script type="text/javascript">
-        $(document).ready(function() {
+    $(document).ready(function() {
 
-            $("#form-login").submit(function(e) {
-                e.preventDefault();
+        $("#form-login").submit(function(e) {
+            e.preventDefault();
 
-                var username = $("#username").val();
-                var password = $("#password").val();
+            var username = $("#username").val();
+            var password = $("#password").val();
 
-                if (username == "") {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Username wajib diisi!'
-                    });
-                    return false;
-                } else if (password == "") {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Password wajib diisi!'
-                    });
-                    return false;
-                } else {
-                    $.ajax({
-                        url: "<?php echo site_url('auth/login'); ?>",
-                        type: "POST",
-                        data: {
-                            username: username,
-                            password: password
-                        },
-                        success: function(response) {
-                            response = JSON.parse(response);
+            if (username == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Username wajib diisi!'
+                });
+                return false;
+            } else if (password == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Password wajib diisi!'
+                });
+                return false;
+            } else {
+                $.ajax({
+                    url: "<?php echo site_url('auth/login'); ?>",
+                    type: "POST",
+                    data: {
+                        username: username,
+                        password: password
+                    },
+                    success: function(response) {
+                        response = JSON.parse(response);
 
-                            if (response.status == 1) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Login Berhasil!',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                }).then(() => {
-                                    window.location.href =
-                                        "<?php echo base_url('dashboard/home'); ?>";
-                                });
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: response.message,
-                                    text: 'Silakan coba lagi!'
-                                });
-                                $("#username").val('');
-                                $("#password").val('');
-                            }
-                        },
-                        error: function() {
+                        if (response.status == 1) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Login Berhasil!',
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(() => {
+                                window.location.href =
+                                    "<?php echo base_url('dashboard/home'); ?>";
+                            });
+                        } else {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Oops...',
-                                text: 'Server error!'
+                                title: response.message,
+                                text: 'Silakan coba lagi!'
                             });
+                            $("#username").val('');
+                            $("#password").val('');
                         }
-                    });
-                }
-            });
-
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Server error!'
+                        });
+                    }
+                });
+            }
         });
+
+    });
     </script>
 </body>
 
