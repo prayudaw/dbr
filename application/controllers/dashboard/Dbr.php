@@ -11,6 +11,7 @@ class Dbr extends CI_Controller
         $this->load->model('dbr_model');
         $this->load->model('barang_model');
         $this->load->model('ruang_model');
+        $this->load->library('dompdf_lib'); // Load library Dompdf_lib yang baru kita buat
     }
 
     public function index()
@@ -136,14 +137,14 @@ class Dbr extends CI_Controller
         $html = $this->load->view('report_barang_pdf', $data, true); // Load view PDF dan simpan outputnya sebagai string
 
         $filename = 'daftar_barang_ruangan_' . date('Ymd_His');
-        // $this->dompdf_lib->create_pdf($html, $filename, TRUE, 'A4', 'portrait');
+        $this->dompdf_lib->create_pdf($html, $filename, TRUE, 'A4', 'portrait');
     }
 
     public function export_excel()
     {
         $filter_ruangan = trim($this->input->get('ruangan'));
         // Fetch all data from the database
-        $data['barang'] = $this->barang_model->get_dbr_filter($filter_ruangan); // Reuse get_all_barang or create a new method for export if needed
+        $data['barang'] = $this->dbr_model->get_dbr_filter($filter_ruangan); // Reuse get_all_barang or create a new method for export if needed
         $data['nama_ruangan'] = $filter_ruangan;
         // Set the appropriate headers for Excel download
 

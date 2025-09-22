@@ -111,12 +111,13 @@
                                                <button type="button" id="btn-reset"
                                                    class="btn btn-default">Reset</button>
 
-                                               <button type="button" id="btn-export-excel" class="btn btn-danger"><i
+                                               <button type="button" id="exportPdfBtn" class="btn btn-danger"><i
                                                        class="fa fa-file-pdf"></i> Export
                                                    PDF</button>
-                                               <button type="button" id="exportPdfBtn" class="btn btn-success"><i
+                                               <button type="button" id="btn-export-excel" class="btn btn-success"><i
                                                        class="fa fa-file-excel"></i> Export
-                                                   PDF</button>
+                                                   Excel</button>
+
                                            </div>
                                        </div>
                                    </div>
