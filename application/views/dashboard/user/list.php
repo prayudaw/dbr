@@ -225,6 +225,7 @@
                var id = $('#id_user').val();
                var username = $('#username_edit').val();
                var password = $('#password_edit').val();
+               var role = $('#role_edit').val();
 
                $.ajax({
                    type: "POST",
@@ -234,6 +235,7 @@
                        id: id,
                        username: username,
                        password: password,
+                       role: role,
                    },
                    success: function(data) {
                        console.log(data);

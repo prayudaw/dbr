@@ -53,6 +53,7 @@ class User extends  MY_Controller
 
     private function get_role_name_by_id($id)
     {
+
         $get_data = $this->roles_model->get_role_by_id($id);
         return $get_data['role_name'];
     }
@@ -76,8 +77,10 @@ class User extends  MY_Controller
         if ($username !== '' && $password !== '') {
             $data_update = array(
                 'username' => $username,
-                'password' => password_hash($password, PASSWORD_DEFAULT)
+                'password' => password_hash($password, PASSWORD_DEFAULT),
+                'role' => $this->input->post('role')
             );
+
             $update = $this->user_model->update_user_by_id($data_update, $id);
             $data = array(
                 'status' => 1,
@@ -96,8 +99,6 @@ class User extends  MY_Controller
     {
         header('Content-Type: application/json');
         $POST = $this->input->post();
-
-
 
         $username = trim($POST['username']);
         $password = trim($POST['password']);
