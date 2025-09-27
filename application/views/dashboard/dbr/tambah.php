@@ -44,11 +44,11 @@
                                                                <select class="form-control" id="barang">
                                                                    <option value="">ketik kode barang </option>
                                                                    <?php foreach ($barang_options as $barang): ?>
-                                                                   <option value="<?= $barang['id']; ?>">
-                                                                       <?= $barang['kode_barang']; ?><?= $barang['NUP']; ?>
-                                                                       - <?= $barang['nama_barang']; ?>- -
-                                                                       <?= $barang['merk']; ?>
-                                                                   </option>
+                                                                       <option value="<?= $barang['id']; ?>">
+                                                                           <?= $barang['kode_barang']; ?><?= $barang['NUP']; ?>
+                                                                           - <?= $barang['nama_barang']; ?>- -
+                                                                           <?= $barang['merk']; ?>
+                                                                       </option>
                                                                    <?php endforeach; ?>
                                                                </select>
                                                            </div>
@@ -112,11 +112,11 @@
                                                                    <option value="">Pilih atau ketik nama ruangan
                                                                    </option>
                                                                    <?php foreach ($ruangan_options as $ruangan): ?>
-                                                                   <option
-                                                                       value="<?= $ruangan['lantai']; ?>-<?= $ruangan['nama_ruangan']; ?>"
-                                                                       <?= set_select('ruangan', $ruangan['nama_ruangan']); ?>>
-                                                                       <?= $ruangan['lantai']; ?>-<?= $ruangan['nama_ruangan']; ?>
-                                                                   </option>
+                                                                       <option
+                                                                           value="<?= $ruangan['lantai']; ?>-<?= $ruangan['nama_ruangan']; ?>"
+                                                                           <?= set_select('ruangan', $ruangan['nama_ruangan']); ?>>
+                                                                           <?= $ruangan['lantai']; ?>-<?= $ruangan['nama_ruangan']; ?>
+                                                                       </option>
                                                                    <?php endforeach; ?>
                                                                </select>
                                                            </div>
@@ -168,89 +168,89 @@
    <!-- End of Footer -->
 
    <script>
-$(document).ready(function() {
+       $(document).ready(function() {
 
-    $('#ruangan').select2({
-        theme: 'bootstrap5', // Menggunakan tema Bootstrap 4 jika Anda memuatnya
-        placeholder: 'Pilih atau ketik nama ruangan',
-        allowClear: true, // Memungkinkan penghapusan pilihan
-        tags: true // Mengizinkan pengguna untuk menambahkan tag 
-    });
+           $('#ruangan').select2({
+               theme: 'bootstrap4', // Menggunakan tema Bootstrap 4 jika Anda memuatnya
+               placeholder: 'Pilih atau ketik nama ruangan',
+               allowClear: true, // Memungkinkan penghapusan pilihan
+               tags: true // Mengizinkan pengguna untuk menambahkan tag 
+           });
 
-    $('#barang').select2({
-        theme: 'bootstrap5', // Menggunakan tema Bootstrap 4 jika Anda memuatnya
-        placeholder: 'Pilih atau ketik Barang',
-        allowClear: true, // Memungkinkan penghapusan pilihan
-        tags: true // Mengizinkan pengguna untuk menambahkan tag
-    });
+           $('#barang').select2({
+               theme: 'bootstrap4', // Menggunakan tema Bootstrap 4 jika Anda memuatnya
+               placeholder: 'Pilih atau ketik Barang',
+               allowClear: true, // Memungkinkan penghapusan pilihan
+               tags: true // Mengizinkan pengguna untuk menambahkan tag
+           });
 
-    $('#barang').on('change', function() {
-        var selectedBarang = $(this).val(); // Dapatkan nilai barang yang dipilih
-        // Lakukan permintaan AJAX
-        $.ajax({
-            url: "<?= site_url('dashboard/barang/ajax_get_barang_by_id') ?>", // URL endpoint AJAX
-            type: "POST",
-            dataType: "json",
-            data: {
-                id: selectedBarang
-            }, // Kirim data barang yang dipilih
-            success: function(data) {
-                // Kosongkan opsi lama pada Select2 barang
-                $('#nama_barang').val(data.nama_barang);
-                $('#kode_barang').val(data.kode_barang);
-                $('#nup').val(data.nup);
-                $('#merk_type').val(data.merk);
-                $('#jumlah_barang').val(1);
-                $('#tahun').val(data.tahun);
-                $('#kondisi').val(data.kondisi);
-                $('#penguasaan').val('Barang Milik Perpustakaan');
+           $('#barang').on('change', function() {
+               var selectedBarang = $(this).val(); // Dapatkan nilai barang yang dipilih
+               // Lakukan permintaan AJAX
+               $.ajax({
+                   url: "<?= site_url('dashboard/barang/ajax_get_barang_by_id') ?>", // URL endpoint AJAX
+                   type: "POST",
+                   dataType: "json",
+                   data: {
+                       id: selectedBarang
+                   }, // Kirim data barang yang dipilih
+                   success: function(data) {
+                       // Kosongkan opsi lama pada Select2 barang
+                       $('#nama_barang').val(data.nama_barang);
+                       $('#kode_barang').val(data.kode_barang);
+                       $('#nup').val(data.nup);
+                       $('#merk_type').val(data.merk);
+                       $('#jumlah_barang').val(1);
+                       $('#tahun').val(data.tahun);
+                       $('#kondisi').val(data.kondisi);
+                       $('#penguasaan').val('Barang Milik Perpustakaan');
 
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error("AJAX Error: " + textStatus, errorThrown);
-                alert("Gagal mengambil data barang. Silakan coba lagi.");
-            }
-        });
-    });
+                   },
+                   error: function(jqXHR, textStatus, errorThrown) {
+                       console.error("AJAX Error: " + textStatus, errorThrown);
+                       alert("Gagal mengambil data barang. Silakan coba lagi.");
+                   }
+               });
+           });
 
-    $('#form_tambah').submit(function(e) {
-        e.preventDefault(); // Mencegah form untuk submit secara normal
-        var formData = $(this).serialize(); // Mengambil semua data dari form
-        $.ajax({
-            type: 'POST',
-            url: '<?php echo base_url('dashboard/dbr/add'); ?>', // URL ke controller dan method Anda
-            data: formData,
-            dataType: 'json', // Tipe data yang diharapkan dari server (JSON)
-            success: function(response) {
-                console.log(response); // untuk check data
-                //Berhasil
-                if (response.status === 'success') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: response.message
-                    });
-                    $('#form_tambah')[0].reset(); // mengosongkan form
+           $('#form_tambah').submit(function(e) {
+               e.preventDefault(); // Mencegah form untuk submit secara normal
+               var formData = $(this).serialize(); // Mengambil semua data dari form
+               $.ajax({
+                   type: 'POST',
+                   url: '<?php echo base_url('dashboard/dbr/add'); ?>', // URL ke controller dan method Anda
+                   data: formData,
+                   dataType: 'json', // Tipe data yang diharapkan dari server (JSON)
+                   success: function(response) {
+                       console.log(response); // untuk check data
+                       //Berhasil
+                       if (response.status === 'success') {
+                           Swal.fire({
+                               icon: 'success',
+                               title: 'Success',
+                               text: response.message
+                           });
+                           $('#form_tambah')[0].reset(); // mengosongkan form
 
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oppss',
-                        text: response.message
-                    });
-                }
-            },
-            error: function(xhr, status, error) {
-                // Gagal
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: '<p style="color:red;">Terjadi kesalahan saat mengirim data.</p>'
-                });
+                       } else {
+                           Swal.fire({
+                               icon: 'error',
+                               title: 'Oppss',
+                               text: response.message
+                           });
+                       }
+                   },
+                   error: function(xhr, status, error) {
+                       // Gagal
+                       Swal.fire({
+                           icon: 'error',
+                           title: 'Oops...',
+                           text: '<p style="color:red;">Terjadi kesalahan saat mengirim data.</p>'
+                       });
 
-            }
-        });
-    });
+                   }
+               });
+           });
 
-});
+       });
    </script>
