@@ -13,6 +13,13 @@ class Auth extends CI_Controller
 
     public function login()
     {
+
+        // Jika user sudah login, arahkan ke dashboard
+        if ($this->session->userdata('username')) {
+            redirect('dashboard/home'); // Ganti 'admin/dashboard' dengan halaman default setelah login
+            exit();
+        }
+
         if ($this->input->is_ajax_request()) {
             $username = $this->input->post('username');
             $password = $this->input->post('password');
@@ -22,7 +29,7 @@ class Auth extends CI_Controller
             if ($user && password_verify($password, $user->password)) {
                 $this->session->set_userdata([
                     'username'  => $user->username,
-                    'role'  => $user->role,
+                    'role_id'  => $user->role,
                     'logged_in' => TRUE
                 ]);
                 echo json_encode(['status' => 1, 'message' => 'Login berhasil']);

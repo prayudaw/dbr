@@ -1,10 +1,10 @@
 <?php
 
-class Dbr_model extends CI_Model
+class Menu_model extends CI_Model
 {
-    var $table = 'dbr';
-    var $column_order = array(null, 'nama_barang', 'kode_barang', 'nup', 'merk_type', 'jumlah_barang', 'kondisi', 'ruangan', 'penguasaan', 'keterangan', 'tanggal_input'); // Kolom yang bisa di-order
-    var $column_search = array('nama_barang', 'kode_barang', 'nup', 'ruangan', 'penguasaan', 'kondisi'); // Kolom yang bisa dicari
+    var $table = 'menus';
+    var $column_order = array(null, 'menu_name', 'url', 'icon', 'parent_id'); // Kolom yang bisa di-order
+    var $column_search = array('menu_name', 'url', 'icon', 'parent_id'); // Kolom yang bisa dicari
     var $order = array('id' => 'desc'); // Urutan default
 
     public function __construct()
@@ -33,38 +33,6 @@ class Dbr_model extends CI_Model
                     $this->db->group_end();
             }
             $i++;
-        }
-
-        ## Search
-        // Penambahan filter dari form
-
-        if (!empty($_POST['searchKodeBarang'])) {
-            $this->db->like('kode_barang', trim($_POST['searchKodeBarang']));
-        }
-
-        if (!empty($_POST['searchNamaBarang'])) {
-            $this->db->like('nama_barang', trim($_POST['searchNamaBarang']));
-        }
-
-        if (!empty($_POST['searchMerk'])) {
-            $this->db->like('merk_type', trim($_POST['searchMerk']));
-        }
-
-
-        if (!empty($_POST['searchNUP'])) {
-            $this->db->like('nup', trim($_POST['searchNUP']));
-        }
-
-        if (!empty($_POST['searchKondisi'])) {
-            $this->db->like('kondisi', trim($_POST['searchKondisi']));
-        }
-
-        if (!empty($_POST['searchPenguasaan'])) {
-            $this->db->like('penguasaan', trim($_POST['searchPenguasaan']));
-        }
-
-        if (!empty($_POST['searchRuangan'])) {
-            $this->db->like('ruangan', trim($_POST['searchRuangan']));
         }
 
         // jika datatable mengirim POST untuk order
@@ -102,18 +70,45 @@ class Dbr_model extends CI_Model
         return $this->db->count_all_results();
     }
 
-    //simpan data ke dbr
+    //simpan data ke table menu
     public function insert($data)
     {
-        return $this->db->insert('dbr', $data);
+        return $this->db->insert($this->table, $data);
     }
 
-    //get data dbr bedasarkan ruangan
-    public function get_dbr_filter($filter_ruangan)
+    //get data menu by id
+    public function get_menu_by_id($id)
     {
-        $this->db->select('*'); // Hanya ambil nama barang
-        $this->db->where('ruangan', $filter_ruangan);
-        $query = $this->db->get($this->table);
-        return $query->result();
+        $this->db->from($this->table);
+        $this->db->where('id', $id);
+        $query = $this->db->get();
+        return $query->row_array();
+    }
+
+    //proses update menu by id
+    public function update_menu_by_id($data, $id)
+    {
+        $this->db->where('id', $id);
+        $this->db->update($this->table, $data);
+    }
+
+    public function delete($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete($this->table);
+        return $this->db->affected_rows();
+    }
+
+
+    public function get_user_menus($role_id)
+    {
+        // Mengambil semua menu yang dapat diakses oleh role_id tertentu
+        $this->db->select('menus.*');
+        $this->db->from('menus');
+        $this->db->join('access_rights', 'access_rights.menu_id = menus.id');
+        $this->db->where('access_rights.role_id', $role_id);
+
+        $query = $this->db->get();
+        return $query->result_array();
     }
 }

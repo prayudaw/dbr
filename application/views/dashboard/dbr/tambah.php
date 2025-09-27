@@ -171,20 +171,21 @@
 $(document).ready(function() {
 
     $('#ruangan').select2({
-        // theme: 'bootstrap4', // Menggunakan tema Bootstrap 4 jika Anda memuatnya
+        theme: 'bootstrap5', // Menggunakan tema Bootstrap 4 jika Anda memuatnya
         placeholder: 'Pilih atau ketik nama ruangan',
         allowClear: true, // Memungkinkan penghapusan pilihan
-        tags: true // Mengizinkan pengguna untuk menambahkan tag (ruangan baru)
+        tags: true // Mengizinkan pengguna untuk menambahkan tag 
     });
 
     $('#barang').select2({
+        theme: 'bootstrap5', // Menggunakan tema Bootstrap 4 jika Anda memuatnya
         placeholder: 'Pilih atau ketik Barang',
         allowClear: true, // Memungkinkan penghapusan pilihan
-        tags: true // Mengizinkan pengguna untuk menambahkan tag (ruangan baru)
+        tags: true // Mengizinkan pengguna untuk menambahkan tag
     });
 
     $('#barang').on('change', function() {
-        var selectedBarang = $(this).val(); // Dapatkan nilai ruangan yang dipilih
+        var selectedBarang = $(this).val(); // Dapatkan nilai barang yang dipilih
         // Lakukan permintaan AJAX
         $.ajax({
             url: "<?= site_url('dashboard/barang/ajax_get_barang_by_id') ?>", // URL endpoint AJAX
@@ -192,7 +193,7 @@ $(document).ready(function() {
             dataType: "json",
             data: {
                 id: selectedBarang
-            }, // Kirim data ruangan yang dipilih
+            }, // Kirim data barang yang dipilih
             success: function(data) {
                 // Kosongkan opsi lama pada Select2 barang
                 $('#nama_barang').val(data.nama_barang);

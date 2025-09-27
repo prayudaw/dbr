@@ -1,10 +1,10 @@
 <?php
 
-class Dbr_model extends CI_Model
+class Roles_model extends CI_Model
 {
-    var $table = 'dbr';
-    var $column_order = array(null, 'nama_barang', 'kode_barang', 'nup', 'merk_type', 'jumlah_barang', 'kondisi', 'ruangan', 'penguasaan', 'keterangan', 'tanggal_input'); // Kolom yang bisa di-order
-    var $column_search = array('nama_barang', 'kode_barang', 'nup', 'ruangan', 'penguasaan', 'kondisi'); // Kolom yang bisa dicari
+    var $table = 'roles';
+    var $column_order = array(null, 'role_name'); // Kolom yang bisa di-order
+    var $column_search = array('role_name'); // Kolom yang bisa dicari
     var $order = array('id' => 'desc'); // Urutan default
 
     public function __construct()
@@ -35,37 +35,6 @@ class Dbr_model extends CI_Model
             $i++;
         }
 
-        ## Search
-        // Penambahan filter dari form
-
-        if (!empty($_POST['searchKodeBarang'])) {
-            $this->db->like('kode_barang', trim($_POST['searchKodeBarang']));
-        }
-
-        if (!empty($_POST['searchNamaBarang'])) {
-            $this->db->like('nama_barang', trim($_POST['searchNamaBarang']));
-        }
-
-        if (!empty($_POST['searchMerk'])) {
-            $this->db->like('merk_type', trim($_POST['searchMerk']));
-        }
-
-
-        if (!empty($_POST['searchNUP'])) {
-            $this->db->like('nup', trim($_POST['searchNUP']));
-        }
-
-        if (!empty($_POST['searchKondisi'])) {
-            $this->db->like('kondisi', trim($_POST['searchKondisi']));
-        }
-
-        if (!empty($_POST['searchPenguasaan'])) {
-            $this->db->like('penguasaan', trim($_POST['searchPenguasaan']));
-        }
-
-        if (!empty($_POST['searchRuangan'])) {
-            $this->db->like('ruangan', trim($_POST['searchRuangan']));
-        }
 
         // jika datatable mengirim POST untuk order
         if ($this->input->post('order')) {
@@ -102,18 +71,43 @@ class Dbr_model extends CI_Model
         return $this->db->count_all_results();
     }
 
-    //simpan data ke dbr
+    //simpan data ke table role
     public function insert($data)
     {
-        return $this->db->insert('dbr', $data);
+        return $this->db->insert($this->table, $data);
     }
 
-    //get data dbr bedasarkan ruangan
-    public function get_dbr_filter($filter_ruangan)
+
+    //get data role all
+    public function get_role_user()
     {
-        $this->db->select('*'); // Hanya ambil nama barang
-        $this->db->where('ruangan', $filter_ruangan);
-        $query = $this->db->get($this->table);
-        return $query->result();
+        $this->db->select('id,role_name');
+        $this->db->from($this->table);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    //get data role by id
+    public function get_role_by_id($id)
+    {
+        $this->db->select('id,role_name');
+        $this->db->from($this->table);
+        $this->db->where('id', $id);
+        $query = $this->db->get();
+        return $query->row_array();
+    }
+
+    //proses update role name by id
+    public function update_role_by_id($data, $id)
+    {
+        $this->db->where('id', $id);
+        $this->db->update($this->table, $data);
+    }
+
+    public function delete($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete($this->table);
+        return $this->db->affected_rows();
     }
 }

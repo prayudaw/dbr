@@ -28,7 +28,7 @@
                    <div class="card-header py-3">
                        <h6 class="m-0 font-weight-bold text-primary"></h6>
                        <button type="button" class="btn btn-primary" id="btn-modal-add">
-                           <i class="fa fa-plus"></i> Tambah user
+                           <i class="fa fa-plus"></i> Tambah Role User
                        </button>
                        <div class="table-responsive">
                            <div class="card-body">
@@ -36,8 +36,7 @@
                                    <thead>
                                        <tr>
                                            <th>No</th>
-                                           <th>Username</th>
-                                           <th>Role</th>
+                                           <th>Role Name</th>
                                            <th>Action</th>
                                    </thead>
                                    <tbody>
@@ -68,32 +67,18 @@
 
    <!-- modal tambah -->
 
-   <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+   <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
        <div class="modal-dialog">
            <div class="modal-content">
                <div class="modal-header">
-                   <h5 class="modal-title" id="addUserModalLabel">Tambah User baru</h5>
+                   <h5 class="modal-title" id="addModalLabel">Tambah Role User</h5>
                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                </div>
                <div class="modal-body">
-                   <form id="addUserForm">
+                   <form id="addForm">
                        <div class="mb-3">
-                           <label for="username" class="form-label">Username</label>
-                           <input type="text" class="form-control" id="username" name="username" required>
-                       </div>
-
-                       <div class="mb-3">
-                           <label for="password" class="form-label">Password</label>
-                           <input type="password" class="form-control" id="password" name="password" required>
-                       </div>
-                       <div class="mb-3">
-                           <label for="role" class="form-label">Role</label>
-                           <select class="form-control" aria-label="" id="role" name="role">
-                               <option value="">--Pilih Role--</option>
-                               <?php foreach ($role_user as $value) { ?>
-                                   <option value="<?php echo $value['id'] ?>"><?php echo $value['role_name'] ?></option>
-                               <?php } ?>
-                           </select>
+                           <label for="role" class="form-label">Role Name</label>
+                           <input type="text" class="form-control" id="role_name" name="role_name">
                        </div>
                        <button type="submit" class="btn btn-primary">Simpan</button>
                    </form>
@@ -102,6 +87,7 @@
        </div>
    </div>
    <!-- end modal tambah-->
+
 
    <!-- modal edit -->
    <div class="modal fade" id="ModalaEdit" tabindex="-1" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
@@ -113,31 +99,13 @@
                <form class="form-horizontal">
                    <div class="modal-body">
                        <div class="form-group">
-                           <label class="control-label col-xs-3">Username</label>
+                           <label class="control-label col-xs-3">Role User</label>
                            <div class="col-xs-9">
-                               <input type="text" name="username_edit" id="username_edit" class="form-control"
-                                   type="text" placeholder="Username">
+                               <input type="text" name="role_name_edit" id="role_name_edit" class="form-control"
+                                   type="text" placeholder="Role Name ">
                            </div>
                        </div>
-                       <div class="form-group">
-                           <label class="control-label col-xs-3">Password</label>
-                           <div class="col-xs-9">
-                               <input type="password" name="password_edit" id="password_edit" class="form-control"
-                                   type="text" placeholder="Password">
-                           </div>
-                       </div>
-                       <div class="form-group">
-                           <label class="control-label col-xs-3">Role</label>
-                           <div class="col-xs-9">
-                               <select class="form-control" aria-label="" id="role_edit" name="role_edit">
-                                   <option value="">--Pilih Role--</option>
-                                   <?php foreach ($role_user as $value) { ?>
-                                       <option value="<?php echo $value['id'] ?>"><?php echo $value['role_name'] ?></option>
-                                   <?php } ?>
-                               </select>
-                           </div>
-                           <input type="hidden" name="id_user" id="id_user">
-                       </div>
+                       <input type="hidden" name="role_id" id="role_id">
                        <div class="modal-footer">
                            <button class="btn" data-dismiss="modal" aria-hidden="true">Tutup</button>
                            <button class="btn btn-info" id="btn_update">Update</button>
@@ -152,18 +120,31 @@
        // Call the dataTables jQuery plugin
        $(document).ready(function() {
 
-           //onclick button tambah user
+           var table;
+           table = $('#table').DataTable({
+               "processing": true, //Feature control the processing indicator.
+               "serverSide": true, //Feature control DataTables' server-side processing mode.
+               "order": [], //Initial no order.
+               "ajax": {
+                   "url": "<?php echo base_url() ?>dashboard/roles_user/ajax_list",
+                   'data': function(data) {},
+                   "type": "POST"
+               },
+               "createdRow": function(row, data, dataIndex) {}
+           });
+
+           //onclick button tambah 
            $('body').on('click', '#btn-modal-add', function() {
-               $('#addUserModal').modal('show');
+               $('#addModal').modal('show');
            });
 
            //proses add 
-           $('#addUserForm').on('submit', function(e) {
+           $('#addForm').on('submit', function(e) {
                e.preventDefault(); // Prevent the default form submission
                var formData = $(this).serialize(); // Serialize form data into a URL-encoded string
 
                $.ajax({
-                   url: '<?php echo base_url() ?>dashboard/user/add_user', // Replace with your backend endpoint
+                   url: '<?php echo base_url() ?>dashboard/roles_user/add', // Replace with your backend endpoint
                    type: 'POST',
                    data: formData,
                    success: function(data) {
@@ -174,8 +155,9 @@
                                title: 'Sukses',
                                text: data.message
                            });
+                           $('#addModal').modal('hide'); //sembunyikan popup add 
+                           table.ajax.reload(); //just reload table
                            // Optional: reload a data table or refresh a list
-                           window.location.reload();
 
                        } else {
                            Swal.fire({
@@ -183,6 +165,7 @@
                                title: 'Oops...',
                                text: data.message
                            });
+
                        }
                        $('#addUserForm')[0].reset();
                        $('#addUserModal').modal('hide');
@@ -204,7 +187,7 @@
                var id = $(this).data('id');
                $.ajax({
                    type: "GET",
-                   url: "<?php echo base_url() ?>dashboard/user/get_user_by_id/" + id,
+                   url: "<?php echo base_url() ?>dashboard/roles_user/get_role_by_id/" + id,
                    dataType: "JSON",
                    data: {
                        id: id
@@ -212,28 +195,25 @@
                    success: function(data) {
                        console.log(data);
                        $('#ModalaEdit').modal('show');
-                       $('#username_edit').val(data.username);
-                       $('#role_edit').val(data.role);
-                       $('#id_user').val(data.id);
+                       $('#role_name_edit').val(data.role_name);
+                       $('#role_id').val(data.id);
                    }
                });
                return false;
            });
 
-           //Proses Update User 
+           //Proses Update role user 
            $('#btn_update').on('click', function() {
-               var id = $('#id_user').val();
-               var username = $('#username_edit').val();
-               var password = $('#password_edit').val();
+               var id = $('#role_id').val();
+               var role_name = $('#role_name_edit').val();
 
                $.ajax({
                    type: "POST",
-                   url: "<?php echo base_url() ?>dashboard/user/update",
+                   url: "<?php echo base_url() ?>dashboard/roles_user/update",
                    dataType: "JSON",
                    data: {
                        id: id,
-                       username: username,
-                       password: password,
+                       role_name: role_name
                    },
                    success: function(data) {
                        console.log(data);
@@ -258,18 +238,43 @@
                });
                return false;
            });
-           var table;
-           table = $('#table').DataTable({
-               "processing": true, //Feature control the processing indicator.
-               "serverSide": true, //Feature control DataTables' server-side processing mode.
-               "order": [], //Initial no order.
-               "ajax": {
-                   "url": "<?php echo base_url() ?>dashboard/user/ajax_list",
-                   'data': function(data) {},
-                   "type": "POST"
-               },
-               "createdRow": function(row, data, dataIndex) {}
+
+           //proses hapus
+           $('body').on('click', '.delete-btn', function() {
+               var id = $(this).data('id');
+               if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+                   // Mengirim permintaan AJAX ke server
+                   $.ajax({
+                       url: '<?php echo base_url('dashboard/roles_user/delete'); ?>',
+                       type: 'POST',
+                       data: {
+                           id: id
+                       },
+                       dataType: 'json',
+                       success: function(response) {
+                           if (response.status === 1) {
+                               Swal.fire({
+                                   icon: 'success',
+                                   title: 'Sukses',
+                                   text: response.message
+                               });
+                               table.ajax.reload(); //just reload table
+                           } else {
+                               Swal.fire({
+                                   icon: 'error',
+                                   title: 'Oops...',
+                                   text: response.message
+                               });
+                           }
+                       },
+                       error: function(xhr, status, error) {
+                           alert("Terjadi kesalahan saat menghubungi server: " +
+                               error);
+                       }
+                   });
+               }
            });
+
 
        });
    </script>

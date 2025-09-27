@@ -109,4 +109,28 @@ class Barang_model extends CI_Model
         $query = $this->db->get($this->table);
         return $query->row_array();
     }
+
+
+    // menghitung total barang bmn milik perpus
+    public function total_barang()
+    {
+        $query = $this->db->get($this->table);
+        return $query->num_rows();
+    }
+
+    public function total_barang_perpus_no_dbr()
+    {
+        $this->db->select("id,kode_barang ,nama_barang ,NUP,merk ,CONCAT(kode_barang,'',NUP) AS kdNup");
+        $this->db->from($this->table);
+        $this->db->where("CONCAT(kode_barang,'',NUP)   NOT IN (SELECT CONCAT(kode_barang,'',nup)  FROM dbr WHERE penguasaan = 'Barang Milik Perpustakaan')");
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+
+
+    //simpan data ke data tabel barang
+    public function insert($data)
+    {
+        return $this->db->insert($this->table, $data);
+    }
 }

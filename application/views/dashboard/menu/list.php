@@ -28,7 +28,7 @@
                    <div class="card-header py-3">
                        <h6 class="m-0 font-weight-bold text-primary"></h6>
                        <button type="button" class="btn btn-primary" id="btn-modal-add">
-                           <i class="fa fa-plus"></i> Tambah user
+                           <i class="fa fa-plus"></i> Tambah Menu
                        </button>
                        <div class="table-responsive">
                            <div class="card-body">
@@ -36,8 +36,11 @@
                                    <thead>
                                        <tr>
                                            <th>No</th>
-                                           <th>Username</th>
-                                           <th>Role</th>
+                                           <th>Menu ID</th>
+                                           <th>menu_name</th>
+                                           <th>url</th>
+                                           <th>icon</th>
+                                           <th>parent_id</th>
                                            <th>Action</th>
                                    </thead>
                                    <tbody>
@@ -66,34 +69,32 @@
    <?php $this->load->view('dashboard/templates/footer') ?>
    <!-- End of Footer -->
 
-   <!-- modal tambah -->
 
-   <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+   <!-- modal tambah -->
+   <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
        <div class="modal-dialog">
            <div class="modal-content">
                <div class="modal-header">
-                   <h5 class="modal-title" id="addUserModalLabel">Tambah User baru</h5>
+                   <h5 class="modal-title" id="addModalLabel">Tambah Menu</h5>
                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                </div>
                <div class="modal-body">
-                   <form id="addUserForm">
+                   <form id="addForm">
                        <div class="mb-3">
-                           <label for="username" class="form-label">Username</label>
-                           <input type="text" class="form-control" id="username" name="username" required>
-                       </div>
-
-                       <div class="mb-3">
-                           <label for="password" class="form-label">Password</label>
-                           <input type="password" class="form-control" id="password" name="password" required>
+                           <label for="role" class="form-label">Menu Name</label>
+                           <input type="text" class="form-control" id="menu_name" name="menu_name">
                        </div>
                        <div class="mb-3">
-                           <label for="role" class="form-label">Role</label>
-                           <select class="form-control" aria-label="" id="role" name="role">
-                               <option value="">--Pilih Role--</option>
-                               <?php foreach ($role_user as $value) { ?>
-                                   <option value="<?php echo $value['id'] ?>"><?php echo $value['role_name'] ?></option>
-                               <?php } ?>
-                           </select>
+                           <label for="role" class="form-label">url</label>
+                           <input type="text" class="form-control" id="url" name="url">
+                       </div>
+                       <div class="mb-3">
+                           <label for="role" class="form-label">icon</label>
+                           <input type="text" class="form-control" id="icon" name="icon">
+                       </div>
+                       <div class="mb-3">
+                           <label for="role" class="form-label">parent_id</label>
+                           <input type="text" class="form-control" id="parent_id" name="parent_id">
                        </div>
                        <button type="submit" class="btn btn-primary">Simpan</button>
                    </form>
@@ -102,6 +103,7 @@
        </div>
    </div>
    <!-- end modal tambah-->
+
 
    <!-- modal edit -->
    <div class="modal fade" id="ModalaEdit" tabindex="-1" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
@@ -113,31 +115,31 @@
                <form class="form-horizontal">
                    <div class="modal-body">
                        <div class="form-group">
-                           <label class="control-label col-xs-3">Username</label>
-                           <div class="col-xs-9">
-                               <input type="text" name="username_edit" id="username_edit" class="form-control"
-                                   type="text" placeholder="Username">
+                           <label class="control-label col-xs-3">Menu Name</label>
+                           <div class="col-xs-3">
+                               <input type="text" name="menu_name_edit" id="menu_name_edit" class="form-control"
+                                   type="text" placeholder="Menu Name">
                            </div>
                        </div>
                        <div class="form-group">
-                           <label class="control-label col-xs-3">Password</label>
                            <div class="col-xs-9">
-                               <input type="password" name="password_edit" id="password_edit" class="form-control"
-                                   type="text" placeholder="Password">
+                               <input type="text" name="url_edit" id="url_edit" class="form-control" type="text"
+                                   placeholder="Url">
                            </div>
                        </div>
                        <div class="form-group">
-                           <label class="control-label col-xs-3">Role</label>
                            <div class="col-xs-9">
-                               <select class="form-control" aria-label="" id="role_edit" name="role_edit">
-                                   <option value="">--Pilih Role--</option>
-                                   <?php foreach ($role_user as $value) { ?>
-                                       <option value="<?php echo $value['id'] ?>"><?php echo $value['role_name'] ?></option>
-                                   <?php } ?>
-                               </select>
+                               <input type="text" name="icon_edit" id="icon_edit" class="form-control" type="text"
+                                   placeholder="Icon">
                            </div>
-                           <input type="hidden" name="id_user" id="id_user">
                        </div>
+                       <div class="form-group">
+                           <div class="col-xs-9">
+                               <input type="text" name="parent_id_edit" id="parent_id_edit" class="form-control"
+                                   type="text" placeholder="Parent id">
+                           </div>
+                       </div>
+                       <input type="hidden" name="menu_id" id="menu_id">
                        <div class="modal-footer">
                            <button class="btn" data-dismiss="modal" aria-hidden="true">Tutup</button>
                            <button class="btn btn-info" id="btn_update">Update</button>
@@ -148,34 +150,50 @@
    </div>
    <!-- end modal edit -->
 
+
    <script type="text/javascript">
        // Call the dataTables jQuery plugin
        $(document).ready(function() {
 
-           //onclick button tambah user
-           $('body').on('click', '#btn-modal-add', function() {
-               $('#addUserModal').modal('show');
+           var table;
+           table = $('#table').DataTable({
+               "processing": true, //Feature control the processing indicator.
+               "serverSide": true, //Feature control DataTables' server-side processing mode.
+               "order": [], //Initial no order.
+               "ajax": {
+                   "url": "<?php echo base_url() ?>dashboard/menu/ajax_list",
+                   'data': function(data) {},
+                   "type": "POST"
+               },
+               "createdRow": function(row, data, dataIndex) {}
            });
 
+
+           //onclick button tambah 
+           $('body').on('click', '#btn-modal-add', function() {
+               $('#addModal').modal('show');
+           });
+
+
            //proses add 
-           $('#addUserForm').on('submit', function(e) {
+           $('#addForm').on('submit', function(e) {
                e.preventDefault(); // Prevent the default form submission
                var formData = $(this).serialize(); // Serialize form data into a URL-encoded string
 
                $.ajax({
-                   url: '<?php echo base_url() ?>dashboard/user/add_user', // Replace with your backend endpoint
+                   url: '<?php echo base_url() ?>dashboard/menu/add', // Replace with your backend endpoint
                    type: 'POST',
                    data: formData,
                    success: function(data) {
-
                        if (data.status == 1) {
                            Swal.fire({
                                icon: 'success',
                                title: 'Sukses',
                                text: data.message
                            });
+                           $('#addModal').modal('hide'); //sembunyikan popup add 
+                           table.ajax.reload(); //just reload table
                            // Optional: reload a data table or refresh a list
-                           window.location.reload();
 
                        } else {
                            Swal.fire({
@@ -184,8 +202,8 @@
                                text: data.message
                            });
                        }
-                       $('#addUserForm')[0].reset();
-                       $('#addUserModal').modal('hide');
+                       $('#addForm')[0].reset();
+                       $('#addModal').modal('hide');
                        // Handle success response from the server
                        // alert('User added successfully!');
 
@@ -204,39 +222,44 @@
                var id = $(this).data('id');
                $.ajax({
                    type: "GET",
-                   url: "<?php echo base_url() ?>dashboard/user/get_user_by_id/" + id,
+                   url: "<?php echo base_url() ?>dashboard/menu/get_menu_by_id/" + id,
                    dataType: "JSON",
                    data: {
                        id: id
                    },
                    success: function(data) {
-                       console.log(data);
                        $('#ModalaEdit').modal('show');
-                       $('#username_edit').val(data.username);
-                       $('#role_edit').val(data.role);
-                       $('#id_user').val(data.id);
+                       $('#menu_name_edit').val(data.menu_name);
+                       $('#url_edit').val(data.url);
+                       $('#icon_edit').val(data.icon);
+                       $('#parent_id_edit').val(data.parent_id);
+                       $('#menu_id').val(data.id);
+
                    }
                });
                return false;
            });
 
-           //Proses Update User 
+           //Proses Update role user 
            $('#btn_update').on('click', function() {
-               var id = $('#id_user').val();
-               var username = $('#username_edit').val();
-               var password = $('#password_edit').val();
+               var id = $('#menu_id').val();
+               var menu_name = $('#menu_name_edit').val();
+               var url = $('#url_edit').val();
+               var icon = $('#icon_edit').val();
+               var parent_id = $('#parent_id_edit').val();
 
                $.ajax({
                    type: "POST",
-                   url: "<?php echo base_url() ?>dashboard/user/update",
+                   url: "<?php echo base_url() ?>dashboard/menu/update",
                    dataType: "JSON",
                    data: {
                        id: id,
-                       username: username,
-                       password: password,
+                       menu_name: menu_name,
+                       url: url,
+                       icon: icon,
+                       parent_id: parent_id,
                    },
                    success: function(data) {
-                       console.log(data);
                        if (data.status == 1) {
                            Swal.fire({
                                icon: 'success',
@@ -244,7 +267,7 @@
                                text: data.message
                            });
                            $('#ModalaEdit').modal('hide');
-                           $('#id_user').val('');
+                           $('#menu_id').val('');
                            table.ajax.reload(); //just reload table
                        } else {
                            Swal.fire({
@@ -258,18 +281,46 @@
                });
                return false;
            });
-           var table;
-           table = $('#table').DataTable({
-               "processing": true, //Feature control the processing indicator.
-               "serverSide": true, //Feature control DataTables' server-side processing mode.
-               "order": [], //Initial no order.
-               "ajax": {
-                   "url": "<?php echo base_url() ?>dashboard/user/ajax_list",
-                   'data': function(data) {},
-                   "type": "POST"
-               },
-               "createdRow": function(row, data, dataIndex) {}
+
+           //proses hapus
+           $('body').on('click', '.delete-btn', function() {
+               var id = $(this).data('id');
+               if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+                   // Mengirim permintaan AJAX ke server
+                   $.ajax({
+                       url: '<?php echo base_url('dashboard/menu/delete'); ?>',
+                       type: 'POST',
+                       data: {
+                           id: id
+                       },
+                       dataType: 'json',
+                       success: function(response) {
+                           if (response.status === 1) {
+                               Swal.fire({
+                                   icon: 'success',
+                                   title: 'Sukses',
+                                   text: response.message
+                               });
+                               table.ajax.reload(); //just reload table
+                           } else {
+                               Swal.fire({
+                                   icon: 'error',
+                                   title: 'Oops...',
+                                   text: response.message
+                               });
+                           }
+                       },
+                       error: function(xhr, status, error) {
+                           alert("Terjadi kesalahan saat menghubungi server: " +
+                               error);
+                       }
+                   });
+               }
            });
+
+
+
+
 
        });
    </script>

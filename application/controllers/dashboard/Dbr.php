@@ -1,7 +1,8 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Dbr extends CI_Controller
+//saat development gunakan CI_Controller  -- MY_Controller 
+class Dbr extends  MY_Controller
 {
 
     public function __construct()
@@ -12,6 +13,12 @@ class Dbr extends CI_Controller
         $this->load->model('barang_model');
         $this->load->model('ruang_model');
         $this->load->library('dompdf_lib'); // Load library Dompdf_lib yang baru kita buat
+        $this->load->model('menu_model'); //wajib ada setiap di controller untuk menampilkan menu sidebar
+        // Jika user belum login, arahkan kembali ke halaman login 
+        if ($this->session->userdata('logged_in') !== TRUE) {
+            redirect('login'); // 
+
+        }
     }
 
     public function index()
