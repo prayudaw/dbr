@@ -1,14 +1,11 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
 
 class Barang_model extends CI_Model
 {
-
-    var $table = 'dbr';
-    var $column_order = array(null, 'nama_barang', 'kode_barang', 'nup', 'merk_type', 'jumlah_barang', 'kondisi', 'ruangan', 'penguasaan', 'keterangan', 'tanggal_input'); // Kolom yang bisa di-order
-    var $column_search = array('nama_barang', 'kode_barang', 'nup', 'ruangan', 'penguasaan', 'kondisi'); // Kolom yang bisa dicari
-    var $order = array('id' => 'desc'); // Urutan default
-
+    private $table = "barang";
+    private $column_order = array('kode_barang', 'nama_barang', 'NUP', 'merk', 'tgl_perolehan', 'kategori');
+    private $column_search = array('kode_barang', 'nama_barang', 'NUP', 'merk', 'tgl_perolehan', 'kategori');
+    private $order = array('nama_barang' => 'asc');
 
     public function __construct()
     {
@@ -16,159 +13,124 @@ class Barang_model extends CI_Model
         $this->load->database();
     }
 
-    // Fungsi baru untuk mengambil daftar barang 
-    public function get_barang()
+    private function _get_datatables_query()
     {
-        // die('tes');
-        $this->db->select('*'); // Hanya ambil nama barang
-        $query = $this->db->get('barang');
-        return $query->result_array();
+        $this->db->from($this->table);
+        $i = 0;
+        foreach ($this->column_search as $item) // loop kolom 
+        {
+            $Search = $this->input->post('search');
+            if ($Search['value']) // jika datatable mengirim POST untuk search
+            {
+                if ($i === 0) // looping pertama
+                {
+                    $this->db->group_start();
+                    $this->db->like($item, $Search['value']);
+                } else {
+                    $this->db->or_like($item, $Search['value']);
+                }
+                if (count($this->column_search) - 1 == $i) //looping terakhir
+                    $this->db->group_end();
+            }
+            $i++;
+        }
+
+        ## Search
+        if (!empty($_POST['searchKodeBarang'])) {
+            $this->db->where('kode_barang like "%' . $_POST['searchKodeBarang'] . '%"');
+        }
+
+        if (!empty($_POST['searchNamaBarang'])) {
+            $this->db->where('nama_barang like "%' . $_POST['searchNamaBarang'] . '%"');
+        }
+
+        if (!empty($_POST['searchKategori'])) {
+            $this->db->where('kategori like "%' . $_POST['searchKategori'] . '%"');
+        }
+
+        if (!empty($_POST['searchMerk'])) {
+            $this->db->where('merk like "%' . $_POST['searchMerk'] . '%"');
+        }
+
+        if (!empty($_POST['searchNUP'])) {
+            $this->db->where('NUP ="' . $_POST['searchNUP'] . '"');
+        }
+
+
+        // jika datatable mengirim POST untuk order
+        if ($this->input->post('order')) {
+            $Order = $this->input->post('order');
+            $this->db->order_by($this->column_order[$Order['0']['column']], $Order['0']['dir']);
+        } else if (isset($this->order)) {
+            $order = $this->order;
+            $this->db->order_by(key($order), $order[key($order)]);
+        }
     }
 
-
-    // Fungsi baru untuk mengambil daftar barang 
-    public function get_dbr_filter($filter_ruangan)
+    function get_datatables()
     {
-        $this->db->select('*'); // Hanya ambil nama barang
-        $this->db->where('ruangan', $filter_ruangan);
-        $query = $this->db->get($this->table);
+        $this->_get_datatables_query();
+        if ($this->input->post('length') != -1)
+            $this->db->limit($this->input->post('length'), $this->input->post('start'));
+        $query = $this->db->get();
+        //echo $this->db->last_query();die();
+
         return $query->result();
     }
 
-    public function get_all_barang()
+    function count_filtered()
     {
-        return $this->db->get($this->table)->result();
+        $this->_get_datatables_query();
+
+        $query = $this->db->get();
+        return $query->num_rows();
     }
 
+    //
+    public function count_all()
+    {
+        $this->db->from($this->table);
+        return $this->db->count_all_results();
+    }
+
+    // Fungsi baru untuk mengambil daftar barang 
+    public function get_barang()
+    {
+        $this->db->select('*'); // Hanya ambil nama barang
+        $query = $this->db->get($this->table);
+        return $query->result_array();
+    }
 
     // Fungsi baru untuk mengambil daftar barang berdasarkan id
     public function get_barang_by_id($id)
     {
         $this->db->select('*');
         $this->db->where('id', $id); // Hanya ambil  berdasarkan id
-        $query = $this->db->get('barang');
+        $query = $this->db->get($this->table);
         return $query->row_array();
     }
 
-    public function simpan_barang($data)
+
+    // menghitung total barang bmn milik perpus
+    public function total_barang()
     {
-        return $this->db->insert('dbr', $data);
+        $query = $this->db->get($this->table);
+        return $query->num_rows();
     }
 
-
-
-    // Method baru untuk menghapus data dbr berdasarkan ID
-    public function delete_dbr_by_id($id)
+    public function total_barang_perpus_no_dbr()
     {
-        $this->db->where('id', $id);
-        $this->db->delete($this->table);
-    }
-
-
-    // Fungsi baru: Mendapatkan detail barang berdasarkan ID
-    public function get_dbr_by_id($id)
-    {
+        $this->db->select("id,kode_barang ,nama_barang ,NUP,merk ,CONCAT(kode_barang,'',NUP) AS kdNup");
         $this->db->from($this->table);
-        $this->db->where('id', $id);
-        $query = $this->db->get();
-        return $query->row(); // Mengembalikan satu baris data
-    }
-
-
-    // Fungsi baru: Memperbarui data barang
-    public function update_barang($id, $data)
-    {
-        $this->db->where('id', $id);
-        return $this->db->update($this->table, $data);
-    }
-
-    // Fungsi baru: Memperbarui data barang
-    public function update_dbr($id, $data)
-    {
-        $this->db->where('id', $id);
-        return $this->db->update($this->table, $data);
-    }
-
-    // Fungsi bantuan untuk DataTables (private)
-    private function _get_datatables_query()
-    {
-        $this->db->from($this->table);
-
-        $i = 0;
-        foreach ($this->column_search as $item) // Loop kolom yang bisa dicari
-        {
-            if ($_POST['search']['value']) // Jika ada nilai pencarian
-            {
-                if ($i === 0) // First loop
-                {
-                    $this->db->group_start(); // Buka kurung
-                    $this->db->like($item, $_POST['search']['value']);
-                } else {
-                    $this->db->or_like($item, $_POST['search']['value']);
-                }
-
-                if (count($this->column_search) - 1 == $i) // Last loop
-                    $this->db->group_end(); // Tutup kurung
-            }
-            $i++;
-        }
-
-        if (isset($_POST['order'])) // Jika ada pengurutan dari DataTables
-        {
-            $this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
-        } else if (isset($this->order)) {
-            $order = $this->order;
-            $this->db->order_by(key($order), $order[key($order)]);
-        }
-
-        // Penambahan filter dari form
-        if (!empty($_POST['filter_nama_barang'])) {
-            $this->db->like('nama_barang', trim($_POST['filter_nama_barang']));
-        }
-
-        if (!empty($_POST['filter_kode_barang'])) {
-            $this->db->like('kode_barang', trim($_POST['filter_kode_barang']));
-        }
-
-
-        if (!empty($_POST['filter_nup'])) {
-            $this->db->like('nup', trim($_POST['filter_nup']));
-        }
-
-        if (!empty($_POST['filter_kondisi'])) {
-            $this->db->like('kondisi', trim($_POST['filter_kondisi']));
-        }
-
-
-        if (!empty($_POST['filter_penguasaan'])) {
-            $this->db->like('penguasaan', trim($_POST['filter_penguasaan']));
-        }
-
-
-        if (!empty($_POST['filter_ruangan'])) {
-            $this->db->where('ruangan', trim($_POST['filter_ruangan']));
-        }
-    }
-
-    public function get_datatables()
-    {
-        $this->_get_datatables_query();
-        if ($_POST['length'] != -1)
-            $this->db->limit($_POST['length'], $_POST['start']);
-        $query = $this->db->get();
-        return $query->result();
-    }
-
-    public function count_filtered()
-    {
-        $this->_get_datatables_query();
+        $this->db->where("CONCAT(kode_barang,'',NUP)   NOT IN (SELECT CONCAT(kode_barang,'',nup)  FROM dbr WHERE penguasaan = 'Barang Milik Perpustakaan')");
         $query = $this->db->get();
         return $query->num_rows();
     }
 
-    public function count_all()
+
+    //simpan data ke data tabel barang
+    public function insert($data)
     {
-        $this->db->from($this->table);
-        return $this->db->count_all_results();
+        return $this->db->insert($this->table, $data);
     }
 }

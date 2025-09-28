@@ -53,5 +53,4 @@ $route['default_controller'] = 'auth/login';
 $route['login'] = 'auth/login';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
-$route['statistik'] = 'barang/statistik';
-
+$route['barang'] = 'barang/daftar';

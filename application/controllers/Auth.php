@@ -1,46 +1,50 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Auth extends CI_Controller {
+class Auth extends CI_Controller
+{
 
     public function __construct()
     {
         parent::__construct();
-        // load model kalau perlu
         $this->load->model('User_model');
         $this->load->library('session');
     }
 
     public function login()
     {
-        // jika tombol login ditekan
-        if ($this->input->post('submit')) {
+
+        // Jika user sudah login, arahkan ke dashboard
+        if ($this->session->userdata('username')) {
+            redirect('dashboard/home'); // Ganti 'admin/dashboard' dengan halaman default setelah login
+            exit();
+        }
+
+        if ($this->input->is_ajax_request()) {
             $username = $this->input->post('username');
             $password = $this->input->post('password');
 
-            // cek user di database lewat model
-            $user = $this->User_model->check_login($username, $password);
+            $user = $this->User_model->get_user_by_username($username);
 
-            // DEBUG
-        echo "<pre>"; print_r($user); echo "</pre>";
-
-            if ($user) {
-                // simpan session
-                $this->session->set_userdata('user', $user);
-                redirect('barang/daftar');
+            if ($user && password_verify($password, $user->password)) {
+                $this->session->set_userdata([
+                    'username'  => $user->username,
+                    'role_id'  => $user->role,
+                    'logged_in' => TRUE
+                ]);
+                echo json_encode(['status' => 1, 'message' => 'Login berhasil']);
             } else {
-                $data['error'] = "Username atau Password salah!";
-                $this->load->view('login', $data);
+                echo json_encode(['status' => 0, 'message' => 'Username atau password salah']);
             }
         } else {
-            // tampilkan form login
+            // kalau akses langsung tanpa AJAX
             $this->load->view('login');
         }
     }
 
     public function logout()
     {
-        $this->session->unset_userdata('user');
+        $this->session->sess_destroy();
         redirect('login');
     }
 }
