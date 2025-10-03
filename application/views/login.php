@@ -85,10 +85,10 @@
                                             class="btn btn-primary btn-user btn-block btn-login">Login</button>
                                     </form>
 
-                                    <hr>
-                                    <div class="text-center">
+                                    <!-- <hr> -->
+                                    <!-- <div class="text-center">
                                         <a class="small" href="#">Lupa password?</a>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
